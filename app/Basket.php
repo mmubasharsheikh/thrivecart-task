@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-class Basket {
+final class Basket
+{
+    private array $items = [];
+
     public function __construct(
         private readonly array $catalogue,
-        private readonly array $deliveryRules,
+        private readonly DeliveryCalculatorInterface $deliveryCalculator,
         private readonly array $offers = [],
-        private array $items = [],
     ) {}
 
     public function add(string $productCode): void
@@ -17,7 +19,7 @@ class Basket {
         }
         $this->items[] = $productCode;
     }
-    
+
     public function total(): float
     {
         $itemsGrouped = array_count_values($this->items);
@@ -25,20 +27,16 @@ class Basket {
 
         foreach ($itemsGrouped as $code => $count) {
             $price = $this->catalogue[$code];
-            if ($code === 'R01') {
-                $pairCount = intdiv($count, 2);
-                $remaining = $count % 2;
-                $subtotal += $pairCount * ($price + $price / 2) + $remaining * $price;
+            $offer = $this->offers[$code] ?? null;
+
+            if ($offer instanceof OfferInterface) {
+                $subtotal += $offer->apply($code, $count, $price);
             } else {
                 $subtotal += $count * $price;
             }
-            
-            $delivery = array_reduce(
-                array_keys($this->deliveryRules),
-                fn($carry, $limit) => $subtotal < $limit ? $this->deliveryRules[$limit] : $carry,
-                0.0
-            );
         }
+
+        $delivery = $this->deliveryCalculator->calculate($subtotal);
 
         return round($subtotal + $delivery, 2);
     }

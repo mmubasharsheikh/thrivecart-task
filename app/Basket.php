@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+namespace App;
+
+use App\Utils\DeliveryCalculators\DeliveryCalculatorInterface;
+use App\Utils\Offers\OfferInterface;
+use InvalidArgumentException;
+
 final class Basket
 {
     private array $items = [];

@@ -1,6 +1,6 @@
 <?php
 
-require "DeliveryCalculatorInterface.php";
+namespace App\Utils\DeliveryCalculators;
 
 class StandardDeliveryCalculator implements DeliveryCalculatorInterface
 {

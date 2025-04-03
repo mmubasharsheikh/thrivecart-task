@@ -1,6 +1,6 @@
 <?php
 
-require "OfferInterface.php";
+namespace App\Utils\Offers;
 
 class RedWidgetOffer implements OfferInterface
 {

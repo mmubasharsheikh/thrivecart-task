@@ -1,8 +1,10 @@
 <?php
 
-require "Basket.php";
-require "Utils/Offers/RedWidgetOffer.php";
-require "Utils/DeliveryCalculators/StandardDeliveryCalculator.php";
+require __DIR__ . '/vendor/autoload.php';
+
+use App\Utils\Offers\RedWidgetOffer;
+use App\Utils\DeliveryCalculators\StandardDeliveryCalculator;
+use App\Basket;
 
 $catalogue = [
     'R01' => 32.95,

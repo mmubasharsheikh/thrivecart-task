@@ -1,5 +1,7 @@
 <?php
 
+require "Basket.php";
+
 $catalogue = [
     'R01' => [
         'name' => 'Red Widget',
@@ -22,3 +24,8 @@ $deliveryRules = [
 ];
 
 $basket = new Basket($catalogue, $deliveryRules);
+
+$basket->add('B01');
+$basket->add('B01');
+
+echo "Total: $" . number_format($basket->total(), 2) . "\n";

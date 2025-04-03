@@ -17,4 +17,17 @@ class Basket {
         }
         $this->items[] = $productCode;
     }
+    
+    public function total(): float
+    {
+        $itemsGrouped = array_count_values($this->items);
+        $subtotal = 0.0;
+
+        foreach ($itemsGrouped as $code => $count) {
+            $price = $this->catalogue[$code];
+            $subtotal += $count * $price['price'];
+        }
+
+        return round($subtotal, 2);
+    }
 }

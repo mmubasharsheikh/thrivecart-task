@@ -25,9 +25,21 @@ class Basket {
 
         foreach ($itemsGrouped as $code => $count) {
             $price = $this->catalogue[$code];
-            $subtotal += $count * $price['price'];
+            if ($code === 'R01') {
+                $pairCount = intdiv($count, 2);
+                $remaining = $count % 2;
+                $subtotal += $pairCount * ($price + $price / 2) + $remaining * $price;
+            } else {
+                $subtotal += $count * $price;
+            }
+            
+            $delivery = array_reduce(
+                array_keys($this->deliveryRules),
+                fn($carry, $limit) => $subtotal < $limit ? $this->deliveryRules[$limit] : $carry,
+                0.0
+            );
         }
 
-        return round($subtotal, 2);
+        return round($subtotal + $delivery, 2);
     }
 }

@@ -9,4 +9,12 @@ class Basket {
         private readonly array $offers = [],
         private array $items = [],
     ) {}
+
+    public function add(string $productCode): void
+    {
+        if (!isset($this->catalogue[$productCode])) {
+            throw new InvalidArgumentException("Product code {$productCode} not found in catalogue.");
+        }
+        $this->items[] = $productCode;
+    }
 }

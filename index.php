@@ -25,10 +25,19 @@ $offers = [
 $deliveryCalculator = new StandardDeliveryCalculator($deliveryRules);
 $basket = new Basket($catalogue, $deliveryCalculator, $offers);
 
-$basket->add('B01');
-$basket->add('B01');
-$basket->add('R01');
-$basket->add('R01');
-$basket->add('R01');
+$args = array_slice($argv, 1);
 
-echo "Total: $" . number_format($basket->total(), 2) . "\n";
+if (empty($args)) {
+    echo "Usage: php index.php B01 R01 R01\n";
+    exit(1);
+}
+
+foreach ($args as $code) {
+    try {
+        $basket->add($code);
+    } catch (InvalidArgumentException $e) {
+        echo "Warning: " . $e->getMessage() . PHP_EOL;
+    }
+}
+
+echo "Total: $" . number_format($basket->total(), 2) . PHP_EOL;
